@@ -480,6 +480,9 @@ function showSettings() {
     const modal = document.getElementById('settingsModal');
     modal.classList.add('show');
     
+    // モーダル表示時はbodyにクラスを追加
+    document.body.classList.add('modal-open');
+    
     // ジャンルリストを生成
     const genreList = document.getElementById('genreList');
     genreList.innerHTML = '';
@@ -639,6 +642,9 @@ function closeSettings() {
     const modal = document.getElementById('settingsModal');
     modal.classList.remove('show');
     
+    // モーダルを閉じるときはクラスを削除
+    document.body.classList.remove('modal-open');
+    
     // ジャンル設定を保存
     const checkedGenres = Array.from(
         document.querySelectorAll('#genreList input[type="checkbox"]:checked')
@@ -677,6 +683,9 @@ function closeSettings() {
 function showSetupModal() {
     const modal = document.getElementById('setupModal');
     modal.classList.add('show');
+    
+    // モーダル表示時はbodyにクラスを追加
+    document.body.classList.add('modal-open');
     
     // ジャンルリストを生成
     const genreList = document.getElementById('setupGenreList');
@@ -727,6 +736,9 @@ function startLearning() {
     
     const modal = document.getElementById('setupModal');
     modal.classList.remove('show');
+    
+    // モーダルを閉じるときはクラスを削除
+    document.body.classList.remove('modal-open');
     
     updateAvailableQuestions();
     showNextQuestion();
@@ -815,10 +827,20 @@ function setupEventListeners() {
     
     // iOSのバウンススクロールを防止
     document.addEventListener('touchmove', (e) => {
-        if (e.target.closest('.main-container')) {
-            // メインコンテナ内はスクロール許可
+        // モーダル内の要素はスクロール許可
+        if (e.target.closest('.modal-content') || 
+            e.target.closest('.genre-list') || 
+            e.target.closest('#subgenreContainer')) {
+            // モーダル内はスクロール可能
             return;
         }
+        
+        // メインコンテナ内もスクロール許可
+        if (e.target.closest('.main-container')) {
+            return;
+        }
+        
+        // それ以外は防止
         e.preventDefault();
     }, { passive: false });
     

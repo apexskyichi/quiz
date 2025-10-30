@@ -56,6 +56,11 @@ body {
     user-select: none;
 }
 
+/* モーダルが開いている時の body */
+body.modal-open {
+    overflow: hidden;
+}
+
 /* ========================================
    ローディング画面
 ======================================== */
@@ -416,6 +421,8 @@ body {
     -webkit-backdrop-filter: blur(5px);
     z-index: 1000;
     animation: fadeIn var(--animation-normal) ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .modal.show {
@@ -432,7 +439,10 @@ body {
     max-width: 400px;
     max-height: 80vh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     animation: slideUp var(--animation-normal) ease;
+    position: relative;
+    overscroll-behavior: contain;
 }
 
 @keyframes slideUp {
@@ -482,6 +492,8 @@ body {
 #subgenreContainer {
     max-height: 300px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 #subgenreContainer .setting-group {
@@ -514,6 +526,7 @@ body {
     gap: 10px;
     max-height: 200px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .genre-item {
@@ -627,6 +640,9 @@ body {
     border-radius: 10px;
     font-size: 14px;
     line-height: 1.8;
+    max-height: 150px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .stats-item {
@@ -707,6 +723,14 @@ body {
     .modal-content {
         width: 95%;
         padding: 20px;
+        max-height: 90vh; /* iPhoneでより高く */
+    }
+    
+    /* iPhone用スクロール最適化 */
+    .modal.show {
+        padding: 20px 0;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
