@@ -1,0 +1,94 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "genre": "英単語",
+      "question": "\"apple\"の意味は？",
+      "answer": "りんご",
+      "explanation": "果物の名前。赤や青のものがある。",
+      "subgenre": "基礎"
+    },
+    {
+      "id": 2,
+      "genre": "英単語",
+      "question": "\"beautiful\"の意味は？",
+      "answer": "美しい",
+      "explanation": "人や物の見た目が魅力的なことを表す形容詞。",
+      "subgenre": "基礎"
+    },
+    {
+      "id": 3,
+      "genre": "英単語",
+      "question": "\"accomplish\"の意味は？",
+      "answer": "達成する、成し遂げる",
+      "explanation": "目標や任務を完了させることを意味する動詞。",
+      "subgenre": "応用"
+    },
+    {
+      "id": 4,
+      "genre": "英単語",
+      "question": "\"sophisticated\"の意味は？",
+      "answer": "洗練された、高度な",
+      "explanation": "複雑で洗練されているさまを表す形容詞。",
+      "subgenre": "応用"
+    },
+    {
+      "id": 5,
+      "genre": "日本史",
+      "question": "大化の改新が起きた年は？",
+      "answer": "645年",
+      "explanation": "中大兄皇子と中臣鎌足が蘇我氏を倒した政変。",
+      "subgenre": "古代"
+    },
+    {
+      "id": 6,
+      "genre": "日本史",
+      "question": "鎌倉幕府を開いた人物は？",
+      "answer": "源頼朝",
+      "explanation": "1192年（いい国作ろう）に征夷大将軍となった。",
+      "subgenre": "中世"
+    },
+    {
+      "id": 7,
+      "genre": "日本史",
+      "question": "明治維新が始まった年は？",
+      "answer": "1868年",
+      "explanation": "江戸幕府が終わり、天皇を中心とした新政府が誕生。",
+      "subgenre": "近代"
+    },
+    {
+      "id": 8,
+      "genre": "数学",
+      "question": "3 × 7 = ?",
+      "answer": "21",
+      "explanation": "九九の基本。3の段の7番目。",
+      "subgenre": "算数"
+    },
+    {
+      "id": 9,
+      "genre": "数学",
+      "question": "x + 5 = 12 のとき、x = ?",
+      "answer": "7",
+      "explanation": "方程式の基本。両辺から5を引くと答えが出る。",
+      "subgenre": "代数"
+    },
+    {
+      "id": 10,
+      "genre": "数学",
+      "question": "正三角形の内角の大きさは？",
+      "answer": "60度",
+      "explanation": "正三角形は3つの角が等しく、180÷3=60度。",
+      "subgenre": "幾何"
+    }
+  ],
+  "genres": [
+    "英単語",
+    "日本史",
+    "数学"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2025-10-30",
+    "totalQuestions": 10
+  }
+}
