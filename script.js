@@ -10,7 +10,6 @@ let currentQuestion = null;    // 現在の問題
 let availableQuestions = [];   // 出題可能な問題リスト
 let masteredQuestions = new Set(); // マスター済み問題のID
 let selectedGenres = [];       // 選択中のジャンル
-let selectedSubgenres = {};    // 選択中のサブジャンル（ジャンルごと）
 let questionRange = { start: null, end: null }; // 出題範囲
 let isAnswerShown = false;     // 答え表示フラグ
 let questionHistory = [];      // 出題履歴（重複防止用）
@@ -58,9 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
 async function loadQuizData() {
     try {
-        // キャッシュを回避するためにタイムスタンプを追加
-        const timestamp = new Date().getTime();
-        const response = await fetch(`./data/questions.json?t=${timestamp}`);
+        const response = await fetch('./data/questions.json');
         if (!response.ok) {
             throw new Error('データファイルが見つかりません');
         }
@@ -93,7 +90,8 @@ function getDemoData() {
                 subgenre: "基礎",
                 question: '"apple" の意味は？',
                 answer: "りんご",
-                explanation: "果物の名前。赤や青のものがある。"
+                explanation: "果物の名前。赤や青のものがある。",
+                difficulty: 1
             },
             {
                 id: 2,
@@ -101,7 +99,8 @@ function getDemoData() {
                 subgenre: "基礎",
                 question: '"beautiful" の意味は？',
                 answer: "美しい",
-                explanation: "人や物の見た目が魅力的なことを表す形容詞。"
+                explanation: "人や物の見た目が魅力的なことを表す形容詞。",
+                difficulty: 1
             },
             {
                 id: 3,
@@ -109,7 +108,8 @@ function getDemoData() {
                 subgenre: "基礎",
                 question: '"coffee" の意味は？',
                 answer: "コーヒー",
-                explanation: "コーヒー豆から作られる飲み物。"
+                explanation: "コーヒー豆から作られる飲み物。",
+                difficulty: 1
             },
             {
                 id: 4,
@@ -117,7 +117,8 @@ function getDemoData() {
                 subgenre: "江戸時代",
                 question: "江戸幕府を開いた人物は？",
                 answer: "徳川家康",
-                explanation: "1603年に征夷大将軍となり、江戸に幕府を開いた。"
+                explanation: "1603年に征夷大将軍となり、江戸に幕府を開いた。",
+                difficulty: 2
             },
             {
                 id: 5,
@@ -125,7 +126,8 @@ function getDemoData() {
                 subgenre: "江戸時代",
                 question: "江戸時代の身分制度を何というか？",
                 answer: "士農工商",
-                explanation: "武士・農民・職人・商人の4つの身分に分けられた制度。"
+                explanation: "武士・農民・職人・商人の4つの身分に分けられた制度。",
+                difficulty: 2
             },
             {
                 id: 6,
@@ -133,7 +135,8 @@ function getDemoData() {
                 subgenre: "幾何",
                 question: "円周率πの近似値は？",
                 answer: "3.14159...",
-                explanation: "円の直径に対する円周の比率を表す無理数。"
+                explanation: "円の直径に対する円周の比率を表す無理数。",
+                difficulty: 3
             },
             {
                 id: 7,
@@ -141,7 +144,8 @@ function getDemoData() {
                 subgenre: "基礎",
                 question: "2の10乗は？",
                 answer: "1024",
-                explanation: "2を10回掛け合わせた数。コンピュータでよく使われる。"
+                explanation: "2を10回掛け合わせた数。コンピュータでよく使われる。",
+                difficulty: 2
             }
         ],
         genres: ["英単語", "日本史", "数学"],
@@ -161,7 +165,6 @@ function loadSettings() {
     if (saved) {
         const settings = JSON.parse(saved);
         selectedGenres = settings.selectedGenres || [];
-        selectedSubgenres = settings.selectedSubgenres || {};
         questionRange = settings.questionRange || { start: null, end: null };
         masteredQuestions = new Set(settings.masteredQuestions || []);
     }
@@ -173,7 +176,6 @@ function loadSettings() {
 function saveSettings() {
     const settings = {
         selectedGenres,
-        selectedSubgenres,
         questionRange,
         masteredQuestions: Array.from(masteredQuestions),
         lastAccessDate: new Date().toISOString()
@@ -205,18 +207,6 @@ function updateAvailableQuestions() {
         // ジャンルフィルター
         if (selectedGenres.length > 0 && !selectedGenres.includes(q.genre)) {
             return false;
-        }
-        
-        // サブジャンルフィルター
-        if (selectedGenres.includes(q.genre) && selectedSubgenres[q.genre]) {
-            const subgenreList = selectedSubgenres[q.genre];
-            // サブジャンルが選択されていて、問題にサブジャンルがある場合のみフィルタ
-            if (subgenreList && subgenreList.length > 0 && q.subgenre) {
-                if (!subgenreList.includes(q.subgenre)) {
-                    return false;
-                }
-            }
-            // サブジャンルがない問題は、そのジャンルが選択されていれば含める
         }
         
         // 範囲フィルター
@@ -283,12 +273,7 @@ function displayQuestion() {
     card.classList.remove('flip');
     
     // 問題情報を設定
-    // ジャンルタグにサブジャンルも表示
-    let genreText = currentQuestion.genre;
-    if (currentQuestion.subgenre) {
-        genreText += ` · ${currentQuestion.subgenre}`;
-    }
-    document.getElementById('genreTag').textContent = genreText;
+    document.getElementById('genreTag').textContent = currentQuestion.genre;
     document.getElementById('questionNumber').textContent = `#${currentQuestion.id}`;
     document.getElementById('questionText').textContent = currentQuestion.question;
     document.getElementById('answerText').textContent = currentQuestion.answer;
@@ -426,15 +411,6 @@ function updateProgressInfo() {
         if (selectedGenres.length > 0 && !selectedGenres.includes(q.genre)) {
             return false;
         }
-        // サブジャンルフィルター
-        if (selectedGenres.includes(q.genre) && selectedSubgenres[q.genre]) {
-            const subgenreList = selectedSubgenres[q.genre];
-            if (subgenreList && subgenreList.length > 0 && q.subgenre) {
-                if (!subgenreList.includes(q.subgenre)) {
-                    return false;
-                }
-            }
-        }
         if (questionRange.start && q.id < questionRange.start) {
             return false;
         }
@@ -447,15 +423,6 @@ function updateProgressInfo() {
     const masteredInRange = quizData.questions.filter(q => {
         if (selectedGenres.length > 0 && !selectedGenres.includes(q.genre)) {
             return false;
-        }
-        // サブジャンルフィルター
-        if (selectedGenres.includes(q.genre) && selectedSubgenres[q.genre]) {
-            const subgenreList = selectedSubgenres[q.genre];
-            if (subgenreList && subgenreList.length > 0 && q.subgenre) {
-                if (!subgenreList.includes(q.subgenre)) {
-                    return false;
-                }
-            }
         }
         if (questionRange.start && q.id < questionRange.start) {
             return false;
@@ -480,9 +447,6 @@ function showSettings() {
     const modal = document.getElementById('settingsModal');
     modal.classList.add('show');
     
-    // モーダル表示時はbodyにクラスを追加
-    document.body.classList.add('modal-open');
-    
     // ジャンルリストを生成
     const genreList = document.getElementById('genreList');
     genreList.innerHTML = '';
@@ -493,24 +457,12 @@ function showSettings() {
         item.className = 'genre-item';
         item.innerHTML = `
             <input type="checkbox" value="${genre}" 
-                   ${selectedGenres.includes(genre) ? 'checked' : ''}
-                   onchange="updateSubgenreList('${genre}')">
+                   ${selectedGenres.includes(genre) ? 'checked' : ''}>
             <span>${genre}</span>
             <span class="genre-count">${count}問</span>
         `;
         genreList.appendChild(item);
     });
-    
-    // サブジャンルリストのコンテナを追加
-    const subgenreContainer = document.getElementById('subgenreContainer');
-    if (subgenreContainer) {
-        subgenreContainer.innerHTML = '';
-        
-        // 選択されているジャンルのサブジャンルを表示
-        selectedGenres.forEach(genre => {
-            createSubgenreSection(genre);
-        });
-    }
     
     // 範囲設定を反映
     document.getElementById('rangeStart').value = questionRange.start || '';
@@ -519,81 +471,6 @@ function showSettings() {
     // 統計情報を更新
     updateStatsInfo();
 }
-
-/**
- * サブジャンルセクションを作成
- */
-function createSubgenreSection(genre) {
-    const container = document.getElementById('subgenreContainer');
-    if (!container) return;
-    
-    // そのジャンルのサブジャンルを取得
-    const subgenres = [...new Set(
-        quizData.questions
-            .filter(q => q.genre === genre && q.subgenre)
-            .map(q => q.subgenre)
-    )];
-    
-    if (subgenres.length === 0) return;
-    
-    const section = document.createElement('div');
-    section.className = 'setting-group';
-    section.setAttribute('data-genre-section', genre);
-    
-    const label = document.createElement('label');
-    label.className = 'setting-label';
-    label.innerHTML = `📂 ${genre} のサブジャンル`;
-    section.appendChild(label);
-    
-    const list = document.createElement('div');
-    list.className = 'subgenre-list genre-list';
-    list.setAttribute('data-genre', genre);
-    
-    subgenres.forEach(subgenre => {
-        const count = quizData.questions.filter(q => 
-            q.genre === genre && q.subgenre === subgenre
-        ).length;
-        
-        const isChecked = selectedSubgenres[genre] && 
-                         selectedSubgenres[genre].includes(subgenre);
-        
-        const item = document.createElement('label');
-        item.className = 'genre-item';
-        item.innerHTML = `
-            <input type="checkbox" value="${subgenre}" 
-                   ${isChecked ? 'checked' : ''}>
-            <span>${subgenre}</span>
-            <span class="genre-count">${count}問</span>
-        `;
-        list.appendChild(item);
-    });
-    
-    section.appendChild(list);
-    container.appendChild(section);
-}
-
-/**
- * ジャンルのチェック状態が変わったときの処理
- */
-function updateSubgenreList(genre) {
-    const checkbox = document.querySelector(`#genreList input[value="${genre}"]`);
-    const section = document.querySelector(`[data-genre-section="${genre}"]`);
-    
-    if (checkbox.checked) {
-        // チェックされた場合、サブジャンルセクションを追加
-        if (!section) {
-            createSubgenreSection(genre);
-        }
-    } else {
-        // チェックが外れた場合、サブジャンルセクションを削除
-        if (section) {
-            section.remove();
-        }
-    }
-}
-
-// グローバルに公開
-window.updateSubgenreList = updateSubgenreList;
 
 /**
  * 統計情報を更新
@@ -642,30 +519,13 @@ function closeSettings() {
     const modal = document.getElementById('settingsModal');
     modal.classList.remove('show');
     
-    // モーダルを閉じるときはクラスを削除
-    document.body.classList.remove('modal-open');
-    
-    // ジャンル設定を保存
+    // 設定を保存
     const checkedGenres = Array.from(
         document.querySelectorAll('#genreList input[type="checkbox"]:checked')
     ).map(cb => cb.value);
     
     selectedGenres = checkedGenres.length > 0 ? checkedGenres : [];
     
-    // サブジャンル設定を保存
-    const newSelectedSubgenres = {};
-    selectedGenres.forEach(genre => {
-        const checkedSubgenres = Array.from(
-            document.querySelectorAll(`.subgenre-list[data-genre="${genre}"] input[type="checkbox"]:checked`)
-        ).map(cb => cb.value);
-        
-        if (checkedSubgenres.length > 0) {
-            newSelectedSubgenres[genre] = checkedSubgenres;
-        }
-    });
-    selectedSubgenres = newSelectedSubgenres;
-    
-    // 範囲設定を保存
     const startVal = document.getElementById('rangeStart').value;
     const endVal = document.getElementById('rangeEnd').value;
     questionRange = {
@@ -683,9 +543,6 @@ function closeSettings() {
 function showSetupModal() {
     const modal = document.getElementById('setupModal');
     modal.classList.add('show');
-    
-    // モーダル表示時はbodyにクラスを追加
-    document.body.classList.add('modal-open');
     
     // ジャンルリストを生成
     const genreList = document.getElementById('setupGenreList');
@@ -718,27 +575,10 @@ function startLearning() {
     }
     
     selectedGenres = checkedGenres;
-    
-    // 初回は選択されたジャンルのすべてのサブジャンルを選択
-    selectedSubgenres = {};
-    selectedGenres.forEach(genre => {
-        const subgenres = [...new Set(
-            quizData.questions
-                .filter(q => q.genre === genre && q.subgenre)
-                .map(q => q.subgenre)
-        )];
-        if (subgenres.length > 0) {
-            selectedSubgenres[genre] = subgenres;
-        }
-    });
-    
     saveSettings();
     
     const modal = document.getElementById('setupModal');
     modal.classList.remove('show');
-    
-    // モーダルを閉じるときはクラスを削除
-    document.body.classList.remove('modal-open');
     
     updateAvailableQuestions();
     showNextQuestion();
@@ -778,27 +618,12 @@ function hideLoading() {
 async function reloadData() {
     if (confirm('問題データを再読み込みしますか？')) {
         showLoading();
-        
-        // Service Workerのキャッシュをクリア（可能な場合）
-        if ('caches' in window) {
-            const cacheNames = await caches.keys();
-            await Promise.all(
-                cacheNames.map(cacheName => {
-                    console.log('キャッシュをクリア:', cacheName);
-                    return caches.delete(cacheName);
-                })
-            );
-        }
-        
         await loadQuizData();
         updateAvailableQuestions();
         showNextQuestion();
         hideLoading();
         closeSettings();
         alert('データを再読み込みしました');
-        
-        // ページをリロード（確実にService Workerを更新）
-        window.location.reload(true);
     }
 }
 
@@ -827,20 +652,10 @@ function setupEventListeners() {
     
     // iOSのバウンススクロールを防止
     document.addEventListener('touchmove', (e) => {
-        // モーダル内の要素はスクロール許可
-        if (e.target.closest('.modal-content') || 
-            e.target.closest('.genre-list') || 
-            e.target.closest('#subgenreContainer')) {
-            // モーダル内はスクロール可能
-            return;
-        }
-        
-        // メインコンテナ内もスクロール許可
         if (e.target.closest('.main-container')) {
+            // メインコンテナ内はスクロール許可
             return;
         }
-        
-        // それ以外は防止
         e.preventDefault();
     }, { passive: false });
     
@@ -878,19 +693,13 @@ function setupEventListeners() {
     // 全選択・選択解除ボタン
     document.getElementById('selectAllBtn').addEventListener('click', () => {
         document.querySelectorAll('#genreList input[type="checkbox"]').forEach(cb => {
-            if (!cb.checked) {
-                cb.checked = true;
-                updateSubgenreList(cb.value);
-            }
+            cb.checked = true;
         });
     });
     
     document.getElementById('selectNoneBtn').addEventListener('click', () => {
         document.querySelectorAll('#genreList input[type="checkbox"]').forEach(cb => {
-            if (cb.checked) {
-                cb.checked = false;
-                updateSubgenreList(cb.value);
-            }
+            cb.checked = false;
         });
     });
     
