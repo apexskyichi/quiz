@@ -422,6 +422,7 @@ body.modal-open {
     z-index: 1000;
     animation: fadeIn var(--animation-normal) ease;
     overflow-y: auto;
+    overflow-x: hidden; /* 横スクロール完全防止 */
     -webkit-overflow-scrolling: touch;
 }
 
@@ -439,10 +440,12 @@ body.modal-open {
     max-width: 400px;
     max-height: 80vh;
     overflow-y: auto;
+    overflow-x: hidden; /* 横スクロールを防止 */
     -webkit-overflow-scrolling: touch;
     animation: slideUp var(--animation-normal) ease;
     position: relative;
     overscroll-behavior: contain;
+    box-sizing: border-box; /* パディングを含めた幅計算 */
 }
 
 @keyframes slideUp {
@@ -486,6 +489,9 @@ body.modal-open {
 /* 設定項目 */
 .setting-group {
     margin-bottom: 25px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden; /* 横スクロール防止 */
 }
 
 /* サブジャンルコンテナ */
@@ -561,6 +567,8 @@ body.modal-open {
     display: flex;
     gap: 10px;
     margin-top: 10px;
+    width: 100%;
+    max-width: 100%;
 }
 
 .select-all-btn, .select-none-btn {
@@ -573,6 +581,9 @@ body.modal-open {
     font-size: 12px;
     cursor: pointer;
     transition: all var(--animation-fast) ease;
+    white-space: nowrap; /* テキストの折り返しを防止 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 長い場合は省略 */
 }
 
 .select-all-btn:hover, .select-none-btn:hover {
@@ -585,19 +596,37 @@ body.modal-open {
     display: flex;
     gap: 10px;
     align-items: center;
+    width: 100%;
+    max-width: 100%;
 }
 
 .range-inputs input {
     flex: 1;
+    min-width: 0; /* 重要: flexアイテムの最小幅を0に */
+    max-width: 120px; /* 最大幅を制限 */
     padding: 10px;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
     font-size: 16px;
+    -webkit-appearance: none; /* スピナー非表示 */
+    -moz-appearance: textfield; /* Firefox用 */
+}
+
+/* Chrome, Safari, Edge用のスピナー非表示 */
+.range-inputs input::-webkit-outer-spin-button,
+.range-inputs input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .range-inputs input:focus {
     outline: none;
     border-color: #667eea;
+}
+
+.range-inputs span {
+    flex-shrink: 0; /* 「〜」の文字が縮まないように */
+    padding: 0 5px;
 }
 
 .range-hint {
@@ -609,6 +638,7 @@ body.modal-open {
 /* リセットボタン */
 .reset-btn, .reload-btn {
     width: 100%;
+    max-width: 100%; /* 幅を制限 */
     padding: 12px;
     background: var(--error-gradient);
     color: white;
@@ -618,6 +648,7 @@ body.modal-open {
     font-weight: 600;
     cursor: pointer;
     transition: transform var(--animation-fast) ease;
+    box-sizing: border-box; /* パディングを含めた幅計算 */
 }
 
 .reset-genre {
@@ -724,13 +755,30 @@ body.modal-open {
         width: 95%;
         padding: 20px;
         max-height: 90vh; /* iPhoneでより高く */
+        overflow-x: hidden; /* 横スクロール防止 */
     }
     
     /* iPhone用スクロール最適化 */
     .modal.show {
         padding: 20px 0;
         overflow-y: scroll;
+        overflow-x: hidden; /* 横スクロール防止 */
         -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 範囲入力をさらにコンパクトに */
+    .range-inputs {
+        gap: 5px;
+    }
+    
+    .range-inputs input {
+        max-width: 100px; /* モバイルではさらに小さく */
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .range-inputs span {
+        font-size: 14px;
     }
 }
 
@@ -740,6 +788,21 @@ body.modal-open {
         min-width: 100px;
         font-size: 13px;
         padding: 10px 15px;
+    }
+    
+    /* 範囲入力をさらに調整 */
+    .range-inputs input {
+        max-width: 80px; /* さらに小さく */
+        padding: 6px;
+        font-size: 13px;
+    }
+    
+    .modal-content {
+        padding: 15px; /* パディングも減らす */
+    }
+    
+    .setting-group {
+        margin-bottom: 20px; /* 間隔を少し狭める */
     }
 }
 
