@@ -16,6 +16,10 @@ let isAnswerShown = false;     // 答え表示フラグ
 let questionHistory = [];      // 出題履歴（重複防止用）
 const MAX_HISTORY = 10;        // 履歴の最大保持数
 
+// 追加: 出題モード管理
+let quizMode = 'random';       // 'random' or 'sequential'
+let currentSequentialIndex = 0; // 順番出題時の現在のインデックス
+
 // ========================================
 // 初期化処理
 // ========================================
@@ -164,6 +168,9 @@ function loadSettings() {
         selectedSubgenres = settings.selectedSubgenres || {};
         questionRange = settings.questionRange || { start: null, end: null };
         masteredQuestions = new Set(settings.masteredQuestions || []);
+        // 追加: 出題モードの復元
+        quizMode = settings.quizMode || 'random';
+        currentSequentialIndex = settings.currentSequentialIndex || 0;
     }
 }
 
@@ -176,7 +183,10 @@ function saveSettings() {
         selectedSubgenres,
         questionRange,
         masteredQuestions: Array.from(masteredQuestions),
-        lastAccessDate: new Date().toISOString()
+        lastAccessDate: new Date().toISOString(),
+        // 追加: 出題モードの保存
+        quizMode,
+        currentSequentialIndex
     };
     localStorage.setItem('quizSettings', JSON.stringify(settings));
 }
@@ -235,6 +245,11 @@ function updateAvailableQuestions() {
         return true;
     });
     
+    // 順番モードの場合はID順にソート
+    if (quizMode === 'sequential') {
+        availableQuestions.sort((a, b) => a.id - b.id);
+    }
+    
     updateProgressInfo();
 }
 
@@ -247,6 +262,51 @@ function showNextQuestion() {
         return;
     }
     
+    if (quizMode === 'sequential') {
+        // 順番出題モード
+        showNextSequentialQuestion();
+    } else {
+        // ランダム出題モード
+        showNextRandomQuestion();
+    }
+}
+
+/**
+ * 順番に次の問題を表示
+ */
+function showNextSequentialQuestion() {
+    // 現在の問題のIDを取得
+    const currentId = currentQuestion ? currentQuestion.id : 0;
+    
+    // 次の未マスター問題を探す
+    let nextQuestion = null;
+    
+    // availableQuestionsはすでにフィルタリング済みでID順
+    for (let q of availableQuestions) {
+        if (q.id > currentId) {
+            nextQuestion = q;
+            break;
+        }
+    }
+    
+    // 最後まで行ったら最初に戻る
+    if (!nextQuestion && availableQuestions.length > 0) {
+        nextQuestion = availableQuestions[0];
+    }
+    
+    if (nextQuestion) {
+        currentQuestion = nextQuestion;
+        currentSequentialIndex = availableQuestions.indexOf(nextQuestion);
+        displayQuestion();
+    } else {
+        showError('次の問題が見つかりません。');
+    }
+}
+
+/**
+ * ランダムに次の問題を表示
+ */
+function showNextRandomQuestion() {
     // 履歴に含まれない問題を選ぶ
     let candidateQuestions = availableQuestions.filter(
         q => !questionHistory.includes(q.id)
@@ -268,7 +328,6 @@ function showNextQuestion() {
         questionHistory.shift();
     }
     
-    // 問題を表示
     displayQuestion();
 }
 
@@ -466,11 +525,53 @@ function updateProgressInfo() {
         return masteredQuestions.has(q.id);
     }).length;
     
+    // 現在のモードを表示
+    const modeText = quizMode === 'sequential' ? '順番' : 'ランダム';
+    
     document.getElementById('currentGenre').textContent = 
         selectedGenres.length === 0 ? 'すべて' : selectedGenres.join(', ');
     document.getElementById('remainingCount').textContent = availableQuestions.length;
     document.getElementById('totalCount').textContent = totalInRange;
     document.getElementById('masteredCount').textContent = masteredInRange;
+    document.getElementById('currentMode').textContent = modeText;
+}
+
+/**
+ * 出題モードを切り替える
+ */
+function toggleQuizMode() {
+    quizMode = quizMode === 'random' ? 'sequential' : 'random';
+    saveSettings();
+    updateProgressInfo();
+    
+    // モードボタンの表示更新
+    updateModeButton();
+    
+    // 順番モードに切り替えた場合、問題リストを再構築
+    if (quizMode === 'sequential') {
+        updateAvailableQuestions();
+        currentSequentialIndex = 0;
+    }
+}
+
+/**
+ * モードボタンの表示更新
+ */
+function updateModeButton() {
+    const modeBtn = document.getElementById('modeToggleBtn');
+    const modeIndicator = document.getElementById('modeIndicator');
+    
+    if (quizMode === 'sequential') {
+        modeBtn.innerHTML = '📋 順番出題';
+        modeBtn.classList.add('sequential-mode');
+        modeIndicator.textContent = '順番';
+        modeIndicator.className = 'mode-indicator sequential';
+    } else {
+        modeBtn.innerHTML = '🎲 ランダム出題';
+        modeBtn.classList.remove('sequential-mode');
+        modeIndicator.textContent = 'ランダム';
+        modeIndicator.className = 'mode-indicator random';
+    }
 }
 
 /**
@@ -511,6 +612,12 @@ function showSettings() {
             createSubgenreSection(genre);
         });
     }
+    
+    // 出題モードの設定を反映
+    const radioButtons = document.querySelectorAll('input[name="quizMode"]');
+    radioButtons.forEach(radio => {
+        radio.checked = radio.value === quizMode;
+    });
     
     // 範囲設定を反映
     document.getElementById('rangeStart').value = questionRange.start || '';
@@ -664,6 +771,16 @@ function closeSettings() {
         }
     });
     selectedSubgenres = newSelectedSubgenres;
+    
+    // 出題モード設定を保存
+    const selectedMode = document.querySelector('input[name="quizMode"]:checked');
+    if (selectedMode) {
+        const newMode = selectedMode.value;
+        if (newMode !== quizMode) {
+            quizMode = newMode;
+            currentSequentialIndex = 0; // モード変更時はインデックスをリセット
+        }
+    }
     
     // 範囲設定を保存
     const startVal = document.getElementById('rangeStart').value;
@@ -861,6 +978,9 @@ function setupEventListeners() {
     // 設定モーダルを閉じる
     document.getElementById('closeSettingsBtn').addEventListener('click', closeSettings);
     
+    // モード切り替えボタン
+    document.getElementById('modeToggleBtn').addEventListener('click', toggleQuizMode);
+    
     // モーダル外クリックで閉じる
     document.getElementById('settingsModal').addEventListener('click', (e) => {
         if (e.target.id === 'settingsModal') {
@@ -931,4 +1051,7 @@ function setupEventListeners() {
             }
         }
     }
+    
+    // 初期状態でモードボタンを更新
+    updateModeButton();
 }

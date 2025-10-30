@@ -20,6 +20,7 @@ html {
     --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     --success-gradient: linear-gradient(135deg, #56d8e4 0%, #5cb8ff 100%);
     --error-gradient: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+    --sequential-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     
     --text-primary: #333;
     --text-secondary: #666;
@@ -205,6 +206,8 @@ body.modal-open {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .info-item span {
@@ -240,6 +243,30 @@ body.modal-open {
     0% { transform: rotateY(0deg) scale(1); }
     50% { transform: rotateY(90deg) scale(0.95); }
     100% { transform: rotateY(0deg) scale(1); }
+}
+
+/* モードインジケーター */
+.mode-indicator {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-gradient);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mode-indicator.sequential {
+    background: var(--sequential-gradient);
+}
+
+.mode-indicator.random {
+    background: var(--primary-gradient);
 }
 
 /* ジャンルタグ */
@@ -387,6 +414,38 @@ body.modal-open {
     margin-left: auto;
 }
 
+/* モード切り替えボタン */
+.mode-toggle-container {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+}
+
+.mode-toggle-btn {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--animation-normal) ease;
+    box-shadow: var(--shadow-light);
+}
+
+.mode-toggle-btn.sequential-mode {
+    background: var(--sequential-gradient);
+    color: white;
+    border-color: transparent;
+}
+
+.mode-toggle-btn:active {
+    transform: scale(0.95);
+}
+
 /* ========================================
    エラーメッセージ
 ======================================== */
@@ -422,7 +481,7 @@ body.modal-open {
     z-index: 1000;
     animation: fadeIn var(--animation-normal) ease;
     overflow-y: auto;
-    overflow-x: hidden; /* 横スクロール完全防止 */
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -440,12 +499,12 @@ body.modal-open {
     max-width: 400px;
     max-height: 80vh;
     overflow-y: auto;
-    overflow-x: hidden; /* 横スクロールを防止 */
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     animation: slideUp var(--animation-normal) ease;
     position: relative;
     overscroll-behavior: contain;
-    box-sizing: border-box; /* パディングを含めた幅計算 */
+    box-sizing: border-box;
 }
 
 @keyframes slideUp {
@@ -491,7 +550,62 @@ body.modal-open {
     margin-bottom: 25px;
     width: 100%;
     max-width: 100%;
-    overflow-x: hidden; /* 横スクロール防止 */
+    overflow-x: hidden;
+}
+
+/* 出題モード選択 */
+.quiz-mode-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mode-radio-item {
+    display: block;
+    cursor: pointer;
+}
+
+.mode-radio-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.mode-radio-label {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9ff;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    transition: all var(--animation-fast) ease;
+}
+
+.mode-radio-item input[type="radio"]:checked + .mode-radio-label {
+    background: #e8ebff;
+    border-color: #667eea;
+}
+
+.mode-icon {
+    font-size: 24px;
+    margin-right: 12px;
+}
+
+.mode-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.mode-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.mode-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
 }
 
 /* サブジャンルコンテナ */
@@ -581,9 +695,9 @@ body.modal-open {
     font-size: 12px;
     cursor: pointer;
     transition: all var(--animation-fast) ease;
-    white-space: nowrap; /* テキストの折り返しを防止 */
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* 長い場合は省略 */
+    text-overflow: ellipsis;
 }
 
 .select-all-btn:hover, .select-none-btn:hover {
@@ -602,14 +716,14 @@ body.modal-open {
 
 .range-inputs input {
     flex: 1;
-    min-width: 0; /* 重要: flexアイテムの最小幅を0に */
-    max-width: 120px; /* 最大幅を制限 */
+    min-width: 0;
+    max-width: 120px;
     padding: 10px;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
     font-size: 16px;
-    -webkit-appearance: none; /* スピナー非表示 */
-    -moz-appearance: textfield; /* Firefox用 */
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
 }
 
 /* Chrome, Safari, Edge用のスピナー非表示 */
@@ -625,7 +739,7 @@ body.modal-open {
 }
 
 .range-inputs span {
-    flex-shrink: 0; /* 「〜」の文字が縮まないように */
+    flex-shrink: 0;
     padding: 0 5px;
 }
 
@@ -638,7 +752,7 @@ body.modal-open {
 /* リセットボタン */
 .reset-btn, .reload-btn {
     width: 100%;
-    max-width: 100%; /* 幅を制限 */
+    max-width: 100%;
     padding: 12px;
     background: var(--error-gradient);
     color: white;
@@ -648,7 +762,7 @@ body.modal-open {
     font-weight: 600;
     cursor: pointer;
     transition: transform var(--animation-fast) ease;
-    box-sizing: border-box; /* パディングを含めた幅計算 */
+    box-sizing: border-box;
 }
 
 .reset-genre {
@@ -754,15 +868,15 @@ body.modal-open {
     .modal-content {
         width: 95%;
         padding: 20px;
-        max-height: 90vh; /* iPhoneでより高く */
-        overflow-x: hidden; /* 横スクロール防止 */
+        max-height: 90vh;
+        overflow-x: hidden;
     }
     
     /* iPhone用スクロール最適化 */
     .modal.show {
         padding: 20px 0;
         overflow-y: scroll;
-        overflow-x: hidden; /* 横スクロール防止 */
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
     }
     
@@ -772,13 +886,18 @@ body.modal-open {
     }
     
     .range-inputs input {
-        max-width: 100px; /* モバイルではさらに小さく */
+        max-width: 100px;
         padding: 8px;
         font-size: 14px;
     }
     
     .range-inputs span {
         font-size: 14px;
+    }
+    
+    .mode-toggle-btn {
+        font-size: 13px;
+        padding: 8px 16px;
     }
 }
 
@@ -792,17 +911,31 @@ body.modal-open {
     
     /* 範囲入力をさらに調整 */
     .range-inputs input {
-        max-width: 80px; /* さらに小さく */
+        max-width: 80px;
         padding: 6px;
         font-size: 13px;
     }
     
     .modal-content {
-        padding: 15px; /* パディングも減らす */
+        padding: 15px;
     }
     
     .setting-group {
-        margin-bottom: 20px; /* 間隔を少し狭める */
+        margin-bottom: 20px;
+    }
+    
+    .progress-info {
+        font-size: 11px;
+        padding: 8px 12px;
+        gap: 8px;
+    }
+    
+    .info-divider {
+        display: none;
+    }
+    
+    .info-item {
+        flex: 1 0 45%;
     }
 }
 
