@@ -58,7 +58,9 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
 async function loadQuizData() {
     try {
-        const response = await fetch('./data/questions.json');
+        // キャッシュを回避するためにタイムスタンプを追加
+        const timestamp = new Date().getTime();
+        const response = await fetch(`./data/questions.json?t=${timestamp}`);
         if (!response.ok) {
             throw new Error('データファイルが見つかりません');
         }
@@ -764,12 +766,27 @@ function hideLoading() {
 async function reloadData() {
     if (confirm('問題データを再読み込みしますか？')) {
         showLoading();
+        
+        // Service Workerのキャッシュをクリア（可能な場合）
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames.map(cacheName => {
+                    console.log('キャッシュをクリア:', cacheName);
+                    return caches.delete(cacheName);
+                })
+            );
+        }
+        
         await loadQuizData();
         updateAvailableQuestions();
         showNextQuestion();
         hideLoading();
         closeSettings();
         alert('データを再読み込みしました');
+        
+        // ページをリロード（確実にService Workerを更新）
+        window.location.reload(true);
     }
 }
 
