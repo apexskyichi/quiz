@@ -248,6 +248,10 @@ body {
     border-radius: 15px;
     font-size: 12px;
     font-weight: 600;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* 問題番号 */
@@ -472,6 +476,28 @@ body {
 /* 設定項目 */
 .setting-group {
     margin-bottom: 25px;
+}
+
+/* サブジャンルコンテナ */
+#subgenreContainer {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#subgenreContainer .setting-group {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+#subgenreContainer .setting-label {
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.subgenre-list {
+    max-height: none;
 }
 
 .setting-label {
