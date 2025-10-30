@@ -1,0 +1,85 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "genre": "英会話",
+      "question": "\"apple\"の意味は？",
+      "answer": "りんご",
+      "explanation": "果物の名前。赤や青のものがある。",
+      "subgenre": "基礎",
+      "difficulty": 1
+    },
+    {
+      "id": 2,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 3,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 4,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 5,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 6,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 7,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 8,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 9,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    },
+    {
+      "id": 10,
+      "genre": "",
+      "question": "",
+      "answer": "",
+      "explanation": ""
+    }
+  ],
+  "genres": [
+    "英会話",
+    ""
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2025-10-30",
+    "totalQuestions": 10
+  }
+}

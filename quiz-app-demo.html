@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Quiz App - かわいいクイズアプリ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* ヘッダー */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .settings-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* メインコンテンツ */
+        .main-container {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 進捗表示 */
+        .progress-info {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 24px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-info span {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* カードコンテナ */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            min-height: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .card.flip {
+            animation: flipCard 0.2s ease;
+        }
+
+        @keyframes flipCard {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0deg); }
+        }
+
+        /* ジャンルタグ */
+        .genre-tag {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* 問題番号 */
+        .question-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f0f0f0;
+            color: #666;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        /* 問題文 */
+        .question-text {
+            font-size: 20px;
+            line-height: 1.6;
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        /* 答えと解説 */
+        .answer-section {
+            display: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        .answer-section.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .answer-label {
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .answer-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .explanation-label {
+            color: #764ba2;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .explanation-text {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        /* ボタンコンテナ */
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-master {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn-master:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn-master.mastered {
+            background: #ccc;
+            color: white;
+        }
+
+        /* ボタン配置用のヘルパークラス */
+        .btn-left {
+            order: 1;
+        }
+
+        .btn-right {
+            order: 2;
+            margin-left: auto;
+        }
+
+        /* 設定モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        /* 設定項目 */
+        .setting-group {
+            margin-bottom: 25px;
+        }
+
+        .setting-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .genre-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .genre-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .genre-item:hover {
+            background: #e8ebff;
+        }
+
+        .genre-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .range-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .range-inputs input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .range-inputs input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 480px) {
+            .card {
+                margin: 0 10px;
+                padding: 30px 20px;
+            }
+
+            .button-container {
+                width: 100%;
+                padding: 0 10px;
+            }
+
+            .btn {
+                min-width: 120px;
+            }
+            
+            .btn-left {
+                margin-left: 0;
+            }
+            
+            .btn-right {
+                margin-left: auto;
+            }
+        }
+
+        /* アイコン */
+        .emoji-icon {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <div class="header">
+        <div class="app-title">
+            <span class="emoji-icon">🌸</span>
+            <span>かわいいクイズ</span>
+        </div>
+        <button class="settings-btn" onclick="openSettings()">設定 ⚙️</button>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div class="main-container">
+        <!-- 進捗情報 -->
+        <div class="progress-info">
+            ジャンル: <span>英単語</span> | 
+            残り: <span>45</span>/50問 | 
+            マスター済み: <span>5</span>問
+        </div>
+
+        <!-- クイズカード -->
+        <div class="card" id="quizCard">
+            <div class="genre-tag">英単語</div>
+            <div class="question-number">#12</div>
+            
+            <!-- 問題表示 -->
+            <div id="questionSection">
+                <div class="question-text">
+                    "Beautiful" の意味は？
+                </div>
+            </div>
+
+            <!-- 答え表示 -->
+            <div class="answer-section" id="answerSection">
+                <div class="answer-label">💡 答え</div>
+                <div class="answer-text">美しい</div>
+                <div class="explanation-label">📝 解説</div>
+                <div class="explanation-text">
+                    人や物の見た目が魅力的で心地よいことを表す形容詞です。
+                </div>
+            </div>
+        </div>
+
+        <!-- ボタン -->
+        <div class="button-container">
+            <button class="btn btn-master btn-left" id="masterBtn" onclick="toggleMaster()">
+                マスター済み ✨
+            </button>
+            <button class="btn btn-primary btn-right" id="answerBtn" onclick="showAnswer()">
+                答えを見る 👀
+            </button>
+            <button class="btn btn-secondary btn-right" id="nextBtn" onclick="nextQuestion()" style="display: none;">
+                次の問題へ →
+            </button>
+        </div>
+    </div>
+
+    <!-- 設定モーダル -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">⚙️ 設定</div>
+                <button class="close-btn" onclick="closeSettings()">×</button>
+            </div>
+
+            <!-- ジャンル選択 -->
+            <div class="setting-group">
+                <label class="setting-label">📚 ジャンル選択</label>
+                <div class="genre-list">
+                    <label class="genre-item">
+                        <input type="checkbox" checked>
+                        <span>英単語 (50問)</span>
+                    </label>
+                    <label class="genre-item">
+                        <input type="checkbox">
+                        <span>日本史 (100問)</span>
+                    </label>
+                    <label class="genre-item">
+                        <input type="checkbox">
+                        <span>数学 (75問)</span>
+                    </label>
+                    <label class="genre-item">
+                        <input type="checkbox">
+                        <span>理科 (80問)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 出題範囲 -->
+            <div class="setting-group">
+                <label class="setting-label">📍 出題範囲</label>
+                <div class="range-inputs">
+                    <input type="number" placeholder="1" value="1" min="1">
+                    <span>〜</span>
+                    <input type="number" placeholder="50" value="50" min="1">
+                </div>
+            </div>
+
+            <!-- マスター済みリセット -->
+            <div class="setting-group">
+                <label class="setting-label">🔄 マスター済みをリセット</label>
+                <button class="reset-btn" onclick="resetMastered()">
+                    すべてリセット
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isAnswerShown = false;
+        let isMastered = false;
+
+        // デモ用の問題データ
+        const demoQuestions = [
+            {
+                genre: "英単語",
+                number: 12,
+                question: '"Beautiful" の意味は？',
+                answer: "美しい",
+                explanation: "人や物の見た目が魅力的で心地よいことを表す形容詞です。"
+            },
+            {
+                genre: "日本史",
+                number: 25,
+                question: "1603年に江戸幕府を開いた人物は？",
+                answer: "徳川家康",
+                explanation: "関ヶ原の戦いで勝利し、征夷大将軍となって江戸に幕府を開きました。"
+            },
+            {
+                genre: "数学",
+                number: 7,
+                question: "円周率πの近似値は？",
+                answer: "3.14159...",
+                explanation: "円の直径に対する円周の比率を表す無理数です。"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function showAnswer() {
+            if (!isAnswerShown) {
+                const card = document.getElementById('quizCard');
+                const answerSection = document.getElementById('answerSection');
+                const answerBtn = document.getElementById('answerBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                
+                card.classList.add('flip');
+                
+                setTimeout(() => {
+                    document.getElementById('questionSection').style.display = 'none';
+                    answerSection.classList.add('show');
+                    answerBtn.style.display = 'none';
+                    nextBtn.style.display = 'block';
+                }, 100);
+                
+                isAnswerShown = true;
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1) % demoQuestions.length;
+            const question = demoQuestions[currentQuestionIndex];
+            
+            const card = document.getElementById('quizCard');
+            card.classList.remove('flip');
+            
+            // 問題を更新
+            document.querySelector('.genre-tag').textContent = question.genre;
+            document.querySelector('.question-number').textContent = `#${question.number}`;
+            document.querySelector('.question-text').textContent = question.question;
+            document.querySelector('.answer-text').textContent = question.answer;
+            document.querySelector('.explanation-text').textContent = question.explanation;
+            
+            // UIをリセット
+            document.getElementById('questionSection').style.display = 'block';
+            document.getElementById('answerSection').classList.remove('show');
+            document.getElementById('answerBtn').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            // マスター済みをリセット
+            const masterBtn = document.getElementById('masterBtn');
+            masterBtn.classList.remove('mastered');
+            masterBtn.innerHTML = 'マスター済み ✨';
+            isMastered = false;
+            
+            isAnswerShown = false;
+        }
+
+        function toggleMaster() {
+            const masterBtn = document.getElementById('masterBtn');
+            isMastered = !isMastered;
+            
+            if (isMastered) {
+                masterBtn.classList.add('mastered');
+                masterBtn.innerHTML = 'マスター解除 ↩️';
+            } else {
+                masterBtn.classList.remove('mastered');
+                masterBtn.innerHTML = 'マスター済み ✨';
+            }
+        }
+
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
+        }
+
+        function resetMastered() {
+            if (confirm('本当にすべてのマスター済み問題をリセットしますか？')) {
+                alert('マスター済みをリセットしました！');
+                closeSettings();
+            }
+        }
+
+        // モーダル外クリックで閉じる
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSettings();
+            }
+        });
+    </script>
+</body>
+</html>

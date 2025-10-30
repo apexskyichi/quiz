@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="かわいいクイズ">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- PWA設定 -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
+    
+    <title>かわいいクイズ - 学習アプリ</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <!-- ローディング画面 -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-icon">🌸</div>
+            <div class="loading-text">読み込み中...</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="app-title">
+            <span class="emoji-icon">🌸</span>
+            <span>かわいいクイズ</span>
+        </div>
+        <button class="settings-btn" id="settingsBtn">
+            設定 ⚙️
+        </button>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-container">
+        <!-- 進捗情報 -->
+        <div class="progress-info" id="progressInfo">
+            <span class="info-item">
+                ジャンル: <span id="currentGenre">-</span>
+            </span>
+            <span class="info-divider">|</span>
+            <span class="info-item">
+                残り: <span id="remainingCount">-</span>/<span id="totalCount">-</span>問
+            </span>
+            <span class="info-divider">|</span>
+            <span class="info-item">
+                マスター: <span id="masteredCount">0</span>問
+            </span>
+        </div>
+
+        <!-- クイズカード -->
+        <div class="card" id="quizCard">
+            <!-- ジャンルタグ -->
+            <div class="genre-tag" id="genreTag">-</div>
+            
+            <!-- 問題番号 -->
+            <div class="question-number" id="questionNumber">#-</div>
+            
+            <!-- 問題表示セクション -->
+            <div class="question-section" id="questionSection">
+                <div class="question-text" id="questionText">
+                    問題を読み込んでいます...
+                </div>
+            </div>
+
+            <!-- 答え表示セクション -->
+            <div class="answer-section" id="answerSection">
+                <div class="answer-label">💡 答え</div>
+                <div class="answer-text" id="answerText">-</div>
+                <div class="explanation-label">📝 解説</div>
+                <div class="explanation-text" id="explanationText">-</div>
+            </div>
+        </div>
+
+        <!-- ボタンコンテナ -->
+        <div class="button-container">
+            <button class="btn btn-master btn-left" id="masterBtn">
+                マスター済み ✨
+            </button>
+            <button class="btn btn-primary btn-right" id="answerBtn">
+                答えを見る 👀
+            </button>
+            <button class="btn btn-primary btn-right" id="nextBtn" style="display: none;">
+                次の問題へ →
+            </button>
+        </div>
+
+        <!-- エラーメッセージ -->
+        <div class="error-message" id="errorMessage" style="display: none;">
+            <span class="error-icon">⚠️</span>
+            <span class="error-text"></span>
+        </div>
+    </main>
+
+    <!-- 設定モーダル -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">⚙️ 設定</div>
+                <button class="close-btn" id="closeSettingsBtn">×</button>
+            </div>
+
+            <!-- ジャンル選択 -->
+            <div class="setting-group">
+                <label class="setting-label">📚 ジャンル選択</label>
+                <div class="genre-list" id="genreList">
+                    <!-- 動的に生成 -->
+                </div>
+                <div class="select-all-container">
+                    <button class="select-all-btn" id="selectAllBtn">すべて選択</button>
+                    <button class="select-none-btn" id="selectNoneBtn">選択解除</button>
+                </div>
+            </div>
+
+            <!-- 出題範囲 -->
+            <div class="setting-group">
+                <label class="setting-label">📍 出題範囲（問題番号）</label>
+                <div class="range-inputs">
+                    <input type="number" id="rangeStart" placeholder="1" min="1">
+                    <span>〜</span>
+                    <input type="number" id="rangeEnd" placeholder="全部" min="1">
+                </div>
+                <div class="range-hint">空欄の場合は全範囲</div>
+            </div>
+
+            <!-- マスター済みリセット -->
+            <div class="setting-group">
+                <label class="setting-label">🔄 マスター済みをリセット</label>
+                <button class="reset-btn" id="resetAllBtn">
+                    すべてリセット
+                </button>
+                <button class="reset-btn reset-genre" id="resetGenreBtn">
+                    選択ジャンルのみリセット
+                </button>
+            </div>
+
+            <!-- データ再読み込み -->
+            <div class="setting-group">
+                <label class="setting-label">📂 データ管理</label>
+                <button class="reload-btn" id="reloadDataBtn">
+                    問題データを再読み込み
+                </button>
+            </div>
+
+            <!-- 統計情報 -->
+            <div class="setting-group">
+                <label class="setting-label">📊 統計情報</label>
+                <div class="stats-info" id="statsInfo">
+                    <!-- 動的に生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 初回セットアップモーダル -->
+    <div class="modal" id="setupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">🎉 ようこそ！</div>
+            </div>
+            <div class="setup-content">
+                <p>かわいいクイズアプリへようこそ！</p>
+                <p>まずは学習したいジャンルを選択してください。</p>
+                <div class="genre-list" id="setupGenreList">
+                    <!-- 動的に生成 -->
+                </div>
+                <button class="btn btn-primary start-btn" id="startBtn">
+                    学習を始める 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="./script.js"></script>
+    <script>
+        // Service Worker の登録（PWA対応）
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
