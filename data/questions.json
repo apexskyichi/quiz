@@ -7,7 +7,7 @@
       "answer": "What's up?",
       "explanation": "What are you up to?の略。",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test1"
     },
     {
       "id": 2,
@@ -16,7 +16,7 @@
       "answer": "Not much.",
       "explanation": "What's up?に対する返事。",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test2"
     },
     {
       "id": 3,
@@ -25,7 +25,7 @@
       "answer": "How's it going?",
       "explanation": "How are you?より自然。",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test3"
     },
     {
       "id": 4,
@@ -34,7 +34,7 @@
       "answer": "pretty good.",
       "explanation": "I'm fineとかは使わない。",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test4"
     },
     {
       "id": 5,
@@ -43,7 +43,7 @@
       "answer": "I see.",
       "explanation": "理解、みたいな感じ",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test5"
     },
     {
       "id": 6,
@@ -52,7 +52,7 @@
       "answer": "I swear",
       "explanation": "発言、約束の誠実さ、真実味を強調。",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test6"
     },
     {
       "id": 7,
@@ -61,7 +61,7 @@
       "answer": "good news",
       "explanation": "The good news is ~ みたいに使う。",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test7"
     },
     {
       "id": 8,
@@ -70,7 +70,7 @@
       "answer": "uh-oh",
       "explanation": "Uh-oh, I think I left my keys at home!みたいに",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test8"
     },
     {
       "id": 9,
@@ -79,7 +79,7 @@
       "answer": "be careful",
       "explanation": "注意してね、みたいな助言。Be careful crossing the street.みたいな",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test9"
     },
     {
       "id": 10,
@@ -88,7 +88,7 @@
       "answer": "Watch out!",
       "explanation": "マジで危ないとき。Watch out! That's really hot!等",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test10"
     },
     {
       "id": 11,
@@ -97,7 +97,7 @@
       "answer": "That's it!",
       "explanation": "タスク完了、誰かに指摘する、同意する、色んな使い方あり",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test11"
     },
     {
       "id": 12,
@@ -106,7 +106,7 @@
       "answer": "That works (for me).",
       "explanation": "提案や計画に同意するときに使う",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test12"
     },
     {
       "id": 13,
@@ -115,7 +115,7 @@
       "answer": "That sucks",
       "explanation": "ある状況や出来事への不満など。若い人がよく使う。「それ最悪やん」みたいな",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test13"
     },
     {
       "id": 14,
@@ -124,7 +124,348 @@
       "answer": "Cheer up.",
       "explanation": "前向きになってほしいとき。",
       "subgenre": "毎日使える100",
-      "difficulty": 1
+      "supplement": "test14"
+    },
+    {
+      "id": 15,
+      "genre": "英会話",
+      "question": "何でもない。気にしないで。",
+      "answer": "Never mind.",
+      "explanation": "前に言ったことがもう重要じゃないことを撤回したりするとき。",
+      "subgenre": "毎日使える100",
+      "supplement": "test15"
+    },
+    {
+      "id": 16,
+      "genre": "英会話",
+      "question": "いいね、すごい、やるじゃん",
+      "answer": "Nice one.",
+      "explanation": "誰かの行動などを称賛するとき。Nice job.とも言う",
+      "subgenre": "毎日使える100",
+      "supplement": "test16"
+    },
+    {
+      "id": 17,
+      "genre": "英会話",
+      "question": "ねぇねぇ、ちょっと聞いてよ",
+      "answer": "Guess what?",
+      "explanation": "意外なことや刺激的なことを話す際、最初に相手の注意をこちらに向ける",
+      "subgenre": "毎日使える100",
+      "supplement": "test17"
+    },
+    {
+      "id": 18,
+      "genre": "英会話",
+      "question": "どうでもよくね？",
+      "answer": "Who cares?",
+      "explanation": "誰も気にしてない、みたいな重要じゃないことへの無関心を表す",
+      "subgenre": "毎日使える100",
+      "supplement": "test18"
+    },
+    {
+      "id": 19,
+      "genre": "英会話",
+      "question": "もちろん。いいよ。是非。",
+      "answer": "Why not?",
+      "explanation": "何かへの賛成など。Sure, why not?の組み合わせでよく使う",
+      "subgenre": "毎日使える100",
+      "supplement": "test19"
+    },
+    {
+      "id": 20,
+      "genre": "英会話",
+      "question": "場合による。～次第。",
+      "answer": "It depends.",
+      "explanation": "場合によるかな。ってこれだけで使える。",
+      "subgenre": "毎日使える100",
+      "supplement": "test20"
+    },
+    {
+      "id": 21,
+      "genre": "英会話",
+      "question": "私も(同意)。同じだ。こちらも。",
+      "answer": "Same here.",
+      "explanation": "他人の発言への共感。同じような経験をしたとき。",
+      "subgenre": "毎日使える100",
+      "supplement": "test21"
+    },
+    {
+      "id": 22,
+      "genre": "英会話",
+      "question": "わかった！理解！文句なし。",
+      "answer": "Fair enough.",
+      "explanation": "全面的な同意じゃなくても、受け入れる、認めるみたいな。",
+      "subgenre": "毎日使える100",
+      "supplement": "test22"
+    },
+    {
+      "id": 23,
+      "genre": "英会話",
+      "question": "十分だ。だいたい同じ。似たようなもの",
+      "answer": "close enough",
+      "explanation": "完全ではないものの何かがほぼ正しいとか、そういうとき。",
+      "subgenre": "毎日使える100",
+      "supplement": "test23"
+    },
+    {
+      "id": 24,
+      "genre": "英会話",
+      "question": "もちろん。是非。言うまでもなく。",
+      "answer": "of course",
+      "explanation": "頼まれたこととか提案に対して同意や喜んで実行することを表す",
+      "subgenre": "毎日使える100",
+      "supplement": "test24"
+    },
+    {
+      "id": 25,
+      "genre": "英会話",
+      "question": "確実だ。疑いもなく。",
+      "answer": "no doubt",
+      "explanation": "自分が何かを絶対に真実だと信じているとき",
+      "subgenre": "毎日使える100",
+      "supplement": "test25"
+    },
+    {
+      "id": 26,
+      "genre": "英会話",
+      "question": "まさか！ありえない！",
+      "answer": "No way!",
+      "explanation": "不可能なこと、ありそうもないこと",
+      "subgenre": "毎日使える100",
+      "supplement": "test26"
+    },
+    {
+      "id": 27,
+      "genre": "英会話",
+      "question": "全然わからない",
+      "answer": "have no idea",
+      "explanation": "I' don't knowよりも知らない程度が高い。「全くわからない」",
+      "subgenre": "毎日使える100",
+      "supplement": "test27"
+    },
+    {
+      "id": 28,
+      "genre": "英会話",
+      "question": "気にしないで。心配しないで。大丈夫。",
+      "answer": "no worries",
+      "explanation": "相手を安心させたり心配や謝罪しなくて良いよってこと。",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 29,
+      "genre": "英会話",
+      "question": "わかった。了解。",
+      "answer": "Got it.",
+      "explanation": "I understandよりも口語的。",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 30,
+      "genre": "英会話",
+      "question": "納得する。意味がわかる。",
+      "answer": "make sense",
+      "explanation": "意味がわかりやすいとき。That make sense.みたいにthatつけてもよし",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 31,
+      "genre": "英会話",
+      "question": "いいね。いいよ。それでいいよ。",
+      "answer": "sounds good",
+      "explanation": "基本的にはOKと同じ。だけどより口語的。",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 32,
+      "genre": "英会話",
+      "question": "ハイタッチ。よくやったね！",
+      "answer": "high five",
+      "explanation": "お祝いや同意のジェスチャ(Really? That's amazing! High five!)",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 33,
+      "genre": "英会話",
+      "question": "賛成の合図。～に賛成する",
+      "answer": "thumbs up",
+      "explanation": "giveといっしょに使われることが多い。Give me the thumbs up",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 34,
+      "genre": "英会話",
+      "question": "よく聞いて下さい",
+      "answer": "listen up",
+      "explanation": "重要なことを言うときに注意をこっちに向ける。",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 35,
+      "genre": "英会話",
+      "question": "話し合う、会って話す",
+      "answer": "catch up",
+      "explanation": "長い間あってなかった人と話すときみたいな",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 36,
+      "genre": "英会話",
+      "question": "(くしゃみに対して)お大事に",
+      "answer": "Bless you!",
+      "explanation": "Bless you と言われたらThank youと返す",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 37,
+      "genre": "英会話",
+      "question": "ご自由にどうぞ、自由にとって良いよ",
+      "answer": "help yourself",
+      "explanation": "許可無しで取って良いよみたいなとき。Please just help yourself.",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 38,
+      "genre": "英会話",
+      "question": "冗談だよ、本気じゃないよ",
+      "answer": "just kidding",
+      "explanation": "話し手の前の発言が冗談なとき。",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 39,
+      "genre": "英会話",
+      "question": "遊ぶ、ブラブラして時間を潰す",
+      "answer": "hang out, chill out",
+      "explanation": "おしゃべりとか映画見たりとかリラックスしたりすること。playだと子どもの遊びになる",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 40,
+      "genre": "英会話",
+      "question": "休憩を取る、一休みする",
+      "answer": "take five",
+      "explanation": "Let's take fiveみたいな。5分休憩のイメージ",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 41,
+      "genre": "英会話",
+      "question": "そこをなんとかお願い。お願い～～",
+      "answer": "pretty please",
+      "explanation": "普通のpleaseを少しかわいくした言い方",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 42,
+      "genre": "英会話",
+      "question": "指切り(約束)",
+      "answer": "pinky promise",
+      "explanation": "Okay then, I'll tell you if you pinky promise.みたいな使い方",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 43,
+      "genre": "英会話",
+      "question": "幸運(成功)を祈る、うまくいくように願う",
+      "answer": "fingers crossed",
+      "explanation": "Fingers crossed it all goes well!",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 44,
+      "genre": "英会話",
+      "question": "実際は。つまり、",
+      "answer": "in fact",
+      "explanation": "I thought this shirt was on sale, but in fact, it costs 20,000 yen.",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 45,
+      "genre": "英会話",
+      "question": "長い間、久しぶりに",
+      "answer": "in ages",
+      "explanation": "I haven't been swimming in the pool in ages!",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 46,
+      "genre": "英会話",
+      "question": "ついに、とうとう",
+      "answer": "at last",
+      "explanation": "I've been looking for the perfect apartment for two months, and at last, I've finally found it.",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 47,
+      "genre": "英会話",
+      "question": "今のところ",
+      "answer": "so far",
+      "explanation": "その時点までの進捗とか",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 48,
+      "genre": "英会話",
+      "question": "惜しい。～しそうで、あと少しで",
+      "answer": "so close",
+      "explanation": "途中まで成功してたけど結局失敗したとか。 I was so close, but…",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 49,
+      "genre": "英会話",
+      "question": "まぁね。ちょっと。",
+      "answer": "kind of",
+      "explanation": "話し言葉ではkinda(カインダ)みたいになる。部分的な同意。",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 50,
+      "genre": "英会話",
+      "question": "ちょうどいい、ぴったり",
+      "answer": "just right",
+      "explanation": "The weather is just right for a picnic today.",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 51,
+      "genre": "英会話",
+      "question": "頑張ってね",
+      "answer": "good luck",
+      "explanation": "Good luck with your interview tomorrow.",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 52,
+      "genre": "英会話",
+      "question": "気を付けて行ってきてね",
+      "answer": "safe travels",
+      "explanation": "",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 53,
+      "genre": "英会話",
+      "question": "もうすぐ到着、もう少しで終わる。",
+      "answer": "nearly there",
+      "explanation": "",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 54,
+      "genre": "英会話",
+      "question": "おいで。さあいこう、頑張れ、元気出せ、もうええわ！",
+      "answer": "come on",
+      "explanation": "",
+      "subgenre": "毎日使える100"
+    },
+    {
+      "id": 55,
+      "genre": "英会話",
+      "question": "準備万端、用意ができてる。",
+      "answer": "all set",
+      "explanation": "",
+      "subgenre": "毎日使える100"
     }
   ],
   "genres": [
@@ -132,7 +473,7 @@
   ],
   "metadata": {
     "version": "1.0",
-    "lastUpdated": "2025-10-30",
-    "totalQuestions": 14
+    "lastUpdated": "2025-10-31",
+    "totalQuestions": 55
   }
 }
