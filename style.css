@@ -361,6 +361,45 @@ body.modal-open {
     color: var(--text-secondary);
 }
 
+/* 補足セクション（答えセクションの後に追加） */
+.supplement-section {
+    margin-top: 25px;
+    padding: 15px;
+    background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+    border-radius: 15px;
+    border-left: 3px solid #a8b4ff;
+    animation: fadeIn var(--animation-fast) ease;
+}
+
+.supplement-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8b95e8;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.supplement-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    opacity: 0.9;
+}
+
+/* レスポンシブ対応に追加 */
+@media (max-width: 480px) {
+    .supplement-section {
+        padding: 12px;
+        margin-top: 20px;
+    }
+    
+    .supplement-text {
+        font-size: 13px;
+    }
+}
+
 /* ========================================
    ボタン
 ======================================== */

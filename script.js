@@ -97,7 +97,8 @@ function getDemoData() {
                 subgenre: "基礎",
                 question: '"apple" の意味は？',
                 answer: "りんご",
-                explanation: "果物の名前。赤や青のものがある。"
+                explanation: "果物の名前。赤や青のものがある。",
+                supplement: "1日1個のりんごは医者を遠ざける、ということわざもあります。"
             },
             {
                 id: 2,
@@ -105,7 +106,8 @@ function getDemoData() {
                 subgenre: "基礎",
                 question: '"beautiful" の意味は？',
                 answer: "美しい",
-                explanation: "人や物の見た目が魅力的なことを表す形容詞。"
+                explanation: "人や物の見た目が魅力的なことを表す形容詞。",
+                supplement: "beautyは名詞形で「美しさ」、beautifullyは副詞形で「美しく」という意味になります。"
             },
             {
                 id: 3,
@@ -121,7 +123,8 @@ function getDemoData() {
                 subgenre: "江戸時代",
                 question: "江戸幕府を開いた人物は？",
                 answer: "徳川家康",
-                explanation: "1603年に征夷大将軍となり、江戸に幕府を開いた。"
+                explanation: "1603年に征夷大将軍となり、江戸に幕府を開いた。",
+                supplement: "家康は「鳴かぬなら鳴くまで待とうホトトギス」という句で、その忍耐強い性格が表現されています。"
             },
             {
                 id: 5,
@@ -137,7 +140,8 @@ function getDemoData() {
                 subgenre: "幾何",
                 question: "円周率πの近似値は？",
                 answer: "3.14159...",
-                explanation: "円の直径に対する円周の比率を表す無理数。"
+                explanation: "円の直径に対する円周の比率を表す無理数。",
+                supplement: "πは無理数であり、小数点以下は無限に続きます。現在、数兆桁まで計算されています。"
             },
             {
                 id: 7,
@@ -145,7 +149,8 @@ function getDemoData() {
                 subgenre: "基礎",
                 question: "2の10乗は？",
                 answer: "1024",
-                explanation: "2を10回掛け合わせた数。コンピュータでよく使われる。"
+                explanation: "2を10回掛け合わせた数。コンピュータでよく使われる。",
+                supplement: "1KB（キロバイト）は正確には1024バイトです。これは2の10乗に由来しています。"
             }
         ],
         genres: ["英単語", "日本史", "数学"],
@@ -352,6 +357,15 @@ function displayQuestion() {
     document.getElementById('questionText').textContent = currentQuestion.question;
     document.getElementById('answerText').textContent = currentQuestion.answer;
     document.getElementById('explanationText').textContent = currentQuestion.explanation;
+    
+    // 補足の表示制御
+    const supplementSection = document.getElementById('supplementSection');
+    if (currentQuestion.supplement) {
+        document.getElementById('supplementText').textContent = currentQuestion.supplement;
+        supplementSection.style.display = 'block';
+    } else {
+        supplementSection.style.display = 'none';
+    }
     
     // セクションの表示切り替え
     document.getElementById('questionSection').style.display = 'block';
