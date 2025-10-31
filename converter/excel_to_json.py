@@ -58,6 +58,9 @@ def excel_to_json(excel_path, output_path=None):
             if 'サブジャンル' in df.columns and row['サブジャンル']:
                 question['subgenre'] = str(row['サブジャンル'])
             
+            if '補足' in df.columns and row['補足']:
+                question['supplement'] = str(row['補足'])
+            
             if '難易度' in df.columns and row['難易度']:
                 try:
                     question['difficulty'] = int(row['難易度'])
@@ -102,6 +105,12 @@ def excel_to_json(excel_path, output_path=None):
         for genre in genres:
             count = df[df['ジャンル'] == genre].shape[0]
             print(f"    - {genre}: {count}問")
+        
+        # 補足がある問題の数をカウント
+        if '補足' in df.columns:
+            supplement_count = df[df['補足'].notna() & (df['補足'] != '')].shape[0]
+            if supplement_count > 0:
+                print(f"  - 補足付き問題: {supplement_count}問")
         
         return True
         
